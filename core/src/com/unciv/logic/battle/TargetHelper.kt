@@ -32,8 +32,8 @@ object TargetHelper {
         // If native bridge is enabled, use it to heavily filter the search space
         val reachableTileIndices = IntArray(tilesToAttackFrom.size) { i -> tilesToAttackFrom[i].first.zeroBasedIndex }
         
-        val nativeTargets = unit.tileMap.nativeMapCache?.getPotentialAttackTargets(
-            unit.civInfo.civName.hashCode(), reachableTileIndices, rangeOfAttack
+        val nativeTargets = unit.currentTile.tileMap.nativeMapCache?.getPotentialAttackTargets(
+            unit.civ.civName.hashCode(), reachableTileIndices, rangeOfAttack
         )
         val nativeTargetIndices = if (nativeTargets != null) {
             val set = com.badlogic.gdx.utils.IntSet(nativeTargets.size)

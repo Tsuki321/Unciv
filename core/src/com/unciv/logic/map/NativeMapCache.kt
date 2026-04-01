@@ -18,11 +18,11 @@ class NativeMapCache(val map: TileMap) {
             // Pass initial state to Rust
             for (tile in map.values) {
                 val idx = tile.zeroBasedIndex
-                val ownerId = tile.getOwner()?.civInfo?.civName?.hashCode() ?: -1 // Can replace with better dictionary indexing if needed
+                val ownerId = tile.getOwner()?.civName?.hashCode() ?: -1 // Can replace with better dictionary indexing if needed
                 val militaryUnitId = if (tile.militaryUnit != null) 1 else 0
                 val civilianUnitId = if (tile.civilianUnit != null) 1 else 0
-                val militaryUnitOwnerId = tile.militaryUnit?.civInfo?.civName?.hashCode() ?: -1
-                val civilianUnitOwnerId = tile.civilianUnit?.civInfo?.civName?.hashCode() ?: -1
+                val militaryUnitOwnerId = tile.militaryUnit?.civ?.civName?.hashCode() ?: -1
+                val civilianUnitOwnerId = tile.civilianUnit?.civ?.civName?.hashCode() ?: -1
                 val roadStatus = tile.roadStatus.ordinal
 
                 NativeBridge.updateTile(
@@ -64,11 +64,11 @@ class NativeMapCache(val map: TileMap) {
 
         val idx = tile.zeroBasedIndex
 
-        val ownerId = tile.getOwner()?.civInfo?.civName?.hashCode() ?: -1
+        val ownerId = tile.getOwner()?.civName?.hashCode() ?: -1
         val militaryUnitId = if (tile.militaryUnit != null) 1 else 0
         val civilianUnitId = if (tile.civilianUnit != null) 1 else 0
-        val militaryUnitOwnerId = tile.militaryUnit?.civInfo?.civName?.hashCode() ?: -1
-        val civilianUnitOwnerId = tile.civilianUnit?.civInfo?.civName?.hashCode() ?: -1
+        val militaryUnitOwnerId = tile.militaryUnit?.civ?.civName?.hashCode() ?: -1
+        val civilianUnitOwnerId = tile.civilianUnit?.civ?.civName?.hashCode() ?: -1
         val roadStatus = tile.roadStatus.ordinal
 
         NativeBridge.updateTile(
