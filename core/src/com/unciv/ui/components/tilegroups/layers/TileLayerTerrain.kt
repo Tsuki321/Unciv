@@ -72,7 +72,7 @@ class TileLayerTerrain(tileGroup: TileGroup, size: Float) : TileLayer(tileGroup,
             if (shouldShowImprovement) {
                 if (usePillagedImprovementImage(tile, viewingCiv))
                     yield("$shownImprovement-Pillaged")
-                else yield(shownImprovement!!)
+                else yield(shownImprovement)
             }
         }
 

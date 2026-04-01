@@ -284,7 +284,7 @@ object StartNormalizer {
 
             if (validBonuses.isNotEmpty() || goodPlotForOasis) {
                 if (goodPlotForOasis) {
-                    plot.addTerrainFeature(oasisEquivalent!!.name)
+                    plot.addTerrainFeature(oasisEquivalent.name)
                     canPlaceOasis = false
                 } else {
                     plot.setTileResource(validBonuses.random())

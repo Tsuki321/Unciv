@@ -6,7 +6,7 @@ pub mod map;
 
 #[no_mangle]
 pub extern "system" fn Java_com_unciv_logic_NativeBridge_hello(
-    mut env: JNIEnv,
+    env: JNIEnv,
     _class: JClass,
 ) -> jstring {
     let result = std::panic::catch_unwind(|| {

@@ -80,8 +80,8 @@ object Automation {
 
         if (areWeRankingSpecialist) {
             // If you have the Food Bonus, count as 1 extra food production (base is 2food)
-            for (unique in localUniqueCache.forCityGetMatchingUniques(city, UniqueType.FoodConsumptionBySpecialists))
-                if (city.matchesFilter(unique.params[1]))
+            for (unique in localUniqueCache.forCityGetMatchingUniques(city, UniqueType.FoodConsumptionByPopulation))
+                if (unique.params[1] == "Specialists" && city.matchesFilter(unique.params[2]))
                     yieldStats.food -= (unique.params[0].toFloat() / 100f) * 2f // base 2 food per Pop
             // Specialist Happiness Percentage Change 0f-1f
             for (unique in localUniqueCache.forCityGetMatchingUniques(city, UniqueType.UnhappinessFromPopulationTypePercentageChange))

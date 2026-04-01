@@ -1,7 +1,6 @@
 use jni::JNIEnv;
-use jni::objects::{JClass, JIntArray, JByteArray, JObject};
+use jni::objects::{JClass, JIntArray};
 use jni::sys::{jint, jlong, jboolean};
-use std::sync::{Arc, RwLock};
 
 pub struct MapCache {
     pub width: i32,

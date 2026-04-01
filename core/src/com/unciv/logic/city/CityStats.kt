@@ -642,11 +642,8 @@ class CityStats(val city: City) {
         var foodEatenBySpecialists = 2f * city.population.getNumberOfSpecialists()
         var foodEaten = city.population.population.toFloat() * 2 - foodEatenBySpecialists
         
-        for (unique in city.getMatchingUniques(UniqueType.FoodConsumptionBySpecialists))
-            if (city.matchesFilter(unique.params[1]))
-                foodEatenBySpecialists *= unique.params[0].toPercent()
-
-        foodEaten += foodEatenBySpecialists
+        for (unique in city.getMatchingUniques(UniqueType.FoodConsumptionByPopulation))
+            if (unique.params[1] == "Specialists" && city.matchesFilter(unique.params[2]))
         
         for (unique in city.getMatchingUniques(UniqueType.FoodConsumptionByPopulation)) {
             if (!city.matchesFilter(unique.params[2])) continue
