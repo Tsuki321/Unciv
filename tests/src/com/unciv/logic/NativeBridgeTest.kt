@@ -15,13 +15,16 @@ import com.unciv.testing.GdxTestRunner
 class NativeBridgeTest {
 
     @Test
-    fun `test native bridge fallback`() {
-        // Assert safeHello doesn't throw even if library fails to load
-        val helloResult = NativeBridge.safeHello()
-        assertNotNull("safeHello should return a string regardless of native state", helloResult)
-        
-        // This ensures the JVM doesn't crash when encountering missing externals
-        // and that our try/catch fallback properly handles the state
+    fun `test native bridge behavior`() {
+        val requireNativeBridge = System.getProperty("unciv.test.requireNativeBridge")?.toBoolean() ?: false
+        if (requireNativeBridge) {
+            assertEquals("Native bridge should be available when required", true, NativeBridge.isNativeAvailable)
+            assertEquals("Hello from Rust!", NativeBridge.hello())
+        } else {
+            // Assert safeHello doesn't throw even if library fails to load
+            val helloResult = NativeBridge.safeHello()
+            assertNotNull("safeHello should return a string regardless of native state", helloResult)
+        }
     }
 
     @Test
