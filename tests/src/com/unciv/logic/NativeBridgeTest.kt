@@ -15,8 +15,8 @@ import com.unciv.testing.GdxTestRunner
 class NativeBridgeTest {
 
     @Test
-    fun `test native bridge fallback`() {
-        val requireNativeBridge = java.lang.Boolean.getBoolean("unciv.test.requireNativeBridge")
+    fun `test native bridge behavior`() {
+        val requireNativeBridge = System.getProperty("unciv.test.requireNativeBridge")?.toBoolean() ?: false
         if (requireNativeBridge) {
             assertEquals("Native bridge should be available when required", true, NativeBridge.isNativeAvailable)
             assertEquals("Hello from Rust!", NativeBridge.hello())
