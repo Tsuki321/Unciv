@@ -60,6 +60,8 @@ allprojects {
 
             "java.lang.ThreadLocal.get",
             "kotlin.IntArray.copyOf",
+            "kotlin.collections.copyOf",
+            "kotlin.IntArray.get",
             "com.badlogic.gdx.utils.IntSet.contains",
 
             "com.badlogic.gdx.graphics.Color.cpy",
