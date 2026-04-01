@@ -1,12 +1,22 @@
 package com.unciv.logic
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.utils.SharedLibraryLoadRuntimeException
 import com.badlogic.gdx.utils.SharedLibraryLoader
 import yairm210.purity.annotations.Readonly
 
 object NativeBridge {
     var isNativeAvailable = false
         private set
+
+    private fun logLoadFailure(message: String?) {
+        isNativeAvailable = false
+        try {
+            Gdx.app?.log("NativeBridge", "Failed to load native bridge library: $message")
+        } catch (e: Exception) {
+            println("Failed to load native bridge library: $message")
+        }
+    }
 
     init {
         try {
@@ -18,19 +28,9 @@ object NativeBridge {
                 println("Successfully loaded native bridge library.")
             }
         } catch (e: UnsatisfiedLinkError) {
-            isNativeAvailable = false
-            try {
-                Gdx.app?.log("NativeBridge", "Failed to load native bridge library: ${e.message}")
-            } catch (e2: Exception) {
-                println("Failed to load native bridge library: ${e.message}")
-            }
-        } catch (e: RuntimeException) {
-            isNativeAvailable = false
-            try {
-                Gdx.app?.log("NativeBridge", "Failed to load native bridge library: ${e.message}")
-            } catch (e2: Exception) {
-                println("Failed to load native bridge library: ${e.message}")
-            }
+            logLoadFailure(e.message)
+        } catch (e: SharedLibraryLoadRuntimeException) {
+            logLoadFailure(e.message)
         }
     }
 
