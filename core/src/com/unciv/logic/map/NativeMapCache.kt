@@ -2,6 +2,7 @@ package com.unciv.logic.map
 
 import com.unciv.logic.NativeBridge
 import com.unciv.logic.map.tile.Tile
+import yairm210.purity.annotations.Readonly
 
 /**
  * Manages the Stateful JNI MapCache inside Rust, exposing
@@ -80,6 +81,7 @@ class NativeMapCache(val map: TileMap) {
 
     private val targetBuffer = ThreadLocal.withInitial { IntArray(1024) }
 
+    @Readonly
     fun getPotentialAttackTargets(myCivId: Int, reachableIndices: IntArray, attackRange: Int): IntArray? {
         if (!NativeBridge.isNativeAvailable || nativePtr == 0L) return null
         

@@ -58,6 +58,10 @@ allprojects {
             "com.badlogic.gdx.math.Vector2.cpy",
             "com.badlogic.gdx.math.Vector2.hashCode",
 
+            "java.lang.ThreadLocal.get",
+            "kotlin.IntArray.copyOf",
+            "com.badlogic.gdx.utils.IntSet.contains",
+
             "com.badlogic.gdx.graphics.Color.cpy",
             "com.badlogic.gdx.graphics.Color.toString",
 

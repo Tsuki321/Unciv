@@ -2,6 +2,7 @@ package com.unciv.logic
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.utils.SharedLibraryLoader
+import yairm210.purity.annotations.Readonly
 
 object NativeBridge {
     var isNativeAvailable = false
@@ -34,7 +35,7 @@ object NativeBridge {
     @JvmStatic external fun destroyMapCache(ptr: Long)
     @JvmStatic external fun updateTile(ptr: Long, index: Int, isWater: Boolean, isOcean: Boolean, isMountain: Boolean, isCityCenter: Boolean, roadStatus: Int, ownerId: Int, militaryUnitOwnerId: Int, civilianUnitOwnerId: Int, militaryUnitId: Int, civilianUnitId: Int)
     @JvmStatic external fun setTileNeighbors(ptr: Long, index: Int, n0: Int, n1: Int, n2: Int, n3: Int, n4: Int, n5: Int)
-    @JvmStatic external fun getPotentialAttackTargets(ptr: Long, myCivId: Int, reachableIndices: IntArray, attackRange: Int, outputArray: IntArray): Int
+    @JvmStatic @Readonly external fun getPotentialAttackTargets(ptr: Long, myCivId: Int, reachableIndices: IntArray, attackRange: Int, outputArray: IntArray): Int
 
     /**
      * Safe wrapper for the hello endpoint that falls back to Kotlin if native fails.

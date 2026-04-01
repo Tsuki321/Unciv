@@ -7,6 +7,7 @@ import com.unciv.logic.map.mapunit.movement.PathsToTilesWithinTurn
 import com.unciv.logic.map.tile.Tile
 import com.unciv.models.ruleset.unique.GameContext
 import com.unciv.models.ruleset.unique.UniqueType
+import yairm210.purity.annotations.LocalState
 import yairm210.purity.annotations.Readonly
 
 object TargetHelper {
@@ -36,8 +37,12 @@ object TargetHelper {
             unit.civ.civName.hashCode(), reachableTileIndices, rangeOfAttack
         )
         val nativeTargetIndices = if (nativeTargets != null) {
-            val set = com.badlogic.gdx.utils.IntSet(nativeTargets.size)
-            for (idx in nativeTargets) set.add(idx)
+            @LocalState val set = com.badlogic.gdx.utils.IntSet(nativeTargets.size)
+            var i = 0
+            while (i < nativeTargets.size) {
+                set.add(nativeTargets[i])
+                i++
+            }
             set
         } else null
 

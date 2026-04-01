@@ -58,7 +58,7 @@ android {
         create("release") {
             val keyStoreString = project.findProperty("KEYSTORE_PATH") as String?
             if (!keyStoreString.isNullOrEmpty()) {
-                storeFile = file(keyStoreString!!)
+                storeFile = file(keyStoreString)
                 storePassword = project.findProperty("STORE_PASSWORD") as String?
                 keyAlias = project.findProperty("KEY_ALIAS") as String?
                 keyPassword = project.findProperty("KEY_PASSWORD") as String?
