@@ -91,6 +91,15 @@ jobs:
           path: desktop/linuxFilesForJar/native/
           merge-multiple: true
 
+      - name: Normalize Linux native library filename
+        run: |
+          if [ -f desktop/linuxFilesForJar/native/libnative_bridge.so ] && [ ! -f desktop/linuxFilesForJar/native/libnative_bridge64.so ]; then
+            cp desktop/linuxFilesForJar/native/libnative_bridge.so desktop/linuxFilesForJar/native/libnative_bridge64.so
+          fi
+
+      - name: Verify native bridge library is available for tests
+        run: test -f desktop/linuxFilesForJar/native/libnative_bridge64.so
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
@@ -98,4 +107,4 @@ jobs:
         run: ./gradlew classes
 
       - name: Run code checks
-        run: ./gradlew check -Djava.library.path=desktop/linuxFilesForJar/native
+        run: ./gradlew check -Djava.library.path=desktop/linuxFilesForJar/native -Dunciv.test.requireNativeBridge=true
