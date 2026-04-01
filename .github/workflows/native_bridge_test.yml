@@ -1,0 +1,71 @@
+name: Native Bridge Integration Tests
+
+on:
+  push:
+    branches:
+      - master
+      - main
+    paths:
+      - 'native-bridge/**'
+      - 'core/src/com/unciv/logic/**'
+      - '.github/workflows/native_bridge_test.yml'
+  pull_request:
+    paths:
+      - 'native-bridge/**'
+      - 'core/src/com/unciv/logic/**'
+
+jobs:
+  build-and-test:
+    name: Build Native Bridge & Run Tests (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Install Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build Native Bridge
+        run: |
+          cd native-bridge
+          cargo build --release
+        
+      - name: Run Core Tests & Fallback Checks
+        run: |
+          ./gradlew :tests:test -Djava.library.path="native-bridge/target/release" --no-daemon --stacktrace
+
+      - name: Decode Keystore for Android Build
+        if: ${{ success() && secrets.KEYSTORE_BASE64 != '' }}
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+        run: |
+          echo "$KEYSTORE_BASE64" | base64 --decode > android/release.keystore
+        shell: bash
+
+      - name: Build and Sign Android APK (Ubuntu Only)
+        if: ${{ success() && secrets.KEYSTORE_BASE64 != '' && matrix.os == 'ubuntu-latest' }}
+        env:
+          ORG_GRADLE_PROJECT_KEYSTORE_PATH: release.keystore
+          ORG_GRADLE_PROJECT_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+          ORG_GRADLE_PROJECT_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+          ORG_GRADLE_PROJECT_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
+        run: |
+          ./gradlew :android:assembleRelease --no-daemon
+
+      - name: Upload Signed Android Artifact
+        if: ${{ success() && secrets.KEYSTORE_BASE64 != '' && matrix.os == 'ubuntu-latest' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: Unciv-Android-APK-Signed
+          path: android/build/outputs/apk/release/android-release.apk

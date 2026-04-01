@@ -77,6 +77,9 @@ class TileMap(initialCapacity: Int = 10) : IsPartOfGameInfoSerialization {
     @Transient
     var ruleset: Ruleset? = null
 
+    @Transient
+    var nativeMapCache: com.unciv.logic.map.NativeMapCache? = null
+
     data class TerrainListData(
         val uniques: UniqueMap,
         val terrainNameSet: Set<String>
@@ -541,6 +544,11 @@ class TileMap(initialCapacity: Int = 10) : IsPartOfGameInfoSerialization {
         val minColumn = tileList.asSequence().map { HexMath.getColumn(it.position) }.min()
         val maxColumn = tileList.asSequence().map { HexMath.getColumn(it.position) }.max()
         width = maxColumn - minColumn + 1
+
+        if (com.unciv.logic.NativeBridge.isNativeAvailable) {
+            nativeMapCache?.destroy()
+            nativeMapCache = com.unciv.logic.map.NativeMapCache(this)
+        }
     }
 
     /** Initialize Civilization.neutralRoads based on Tile.roadOwner

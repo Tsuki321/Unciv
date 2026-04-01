@@ -55,6 +55,20 @@ android {
             keyPassword = "android"
             storePassword = "android"
         }
+        create("release") {
+            val keyStoreString = project.findProperty("KEYSTORE_PATH") as String?
+            if (!keyStoreString.isNullOrEmpty()) {
+                storeFile = file(keyStoreString!!)
+                storePassword = project.findProperty("STORE_PASSWORD") as String?
+                keyAlias = project.findProperty("KEY_ALIAS") as String?
+                keyPassword = project.findProperty("KEY_PASSWORD") as String?
+            } else {
+                storeFile = rootProject.file("android/debug.keystore")
+                keyAlias = "androiddebugkey"
+                keyPassword = "android"
+                storePassword = "android"
+            }
+        }
     }
 
     buildTypes {
@@ -62,6 +76,7 @@ android {
             isDebuggable = true
         }
         release {
+            signingConfig = signingConfigs.getByName("release")
             // If you make this true you get a version of the game that just flat-out doesn't run
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")

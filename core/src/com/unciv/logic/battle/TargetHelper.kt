@@ -22,11 +22,27 @@ object TargetHelper {
 
         val unitMustBeSetUp = unit.hasUnique(UniqueType.MustSetUp)
         val tilesToAttackFrom = if (stayOnTile || unit.baseUnit.movesLikeAirUnits)
-            sequenceOf(Pair(unit.currentTile, unit.currentMovement))
-        else getTilesToAttackFromWhenUnitMoves(unitDistanceToTiles, unitMustBeSetUp, unit)
+            listOf(Pair(unit.currentTile, unit.currentMovement))
+        else getTilesToAttackFromWhenUnitMoves(unitDistanceToTiles, unitMustBeSetUp, unit).toList()
 
         val tilesWithEnemies: HashSet<Tile> = HashSet()
         val tilesWithoutEnemies: HashSet<Tile> = HashSet()
+
+        // NATIVE OPTIMIZATION: Get all possible tiles that have foreign units or cities within attack range
+        // If native bridge is enabled, use it to heavily filter the search space
+        val reachableTileIndices = IntArray(tilesToAttackFrom.size) { i -> tilesToAttackFrom[i].first.zeroBasedIndex }
+        
+        val nativeTargets = unit.tileMap.nativeMapCache?.getPotentialAttackTargets(
+            unit.civInfo.civName.hashCode(), reachableTileIndices, rangeOfAttack
+        )
+        val nativeTargetIndices = if (nativeTargets != null) {
+            val set = com.badlogic.gdx.utils.IntSet(nativeTargets.size)
+            for (idx in nativeTargets) set.add(idx)
+            set
+        } else null
+
+        val skipOptimization = unit.isPreparingAirSweep()
+
         for ((reachableTile, movementLeft) in tilesToAttackFrom) {  // tiles we'll still have energy after we reach there
             // If we are a melee unit that is escorting, we only want to be able to attack from this
             // tile if the escorted unit can also move into the tile we are attacking if we kill the enemy unit.
@@ -44,6 +60,12 @@ object TargetHelper {
                 else reachableTile.tileMap.getViewableTiles(reachableTile.position, rangeOfAttack, true).asSequence()
 
             for (tile in tilesInAttackRange) {
+                // PHASE 3 NATIVE BRIDGE OPTIMIZATION: Instantly skip tiles guaranteed logically empty by Rust MapCache
+                if (!skipOptimization && nativeTargetIndices != null && !nativeTargetIndices.contains(tile.zeroBasedIndex)) {
+                    tilesWithoutEnemies += tile
+                    continue
+                }
+
                 when {
                     // Since military units can technically enter tiles with enemy civilians,
                     // some try to move to to the tile and then attack the unit it contains, which is silly
