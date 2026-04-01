@@ -52,7 +52,7 @@ class UnitPresenter(private val unitTable: UnitTable, private val worldScreen: W
         if (captured || disappeared) {
             unitTable.selectUnit()
             worldScreen.shouldUpdate = true
-            return
+            return@let
         }
 
         // set texts - this is valid even when it's the same unit, because movement points and health change
