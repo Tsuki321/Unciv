@@ -24,6 +24,13 @@ object NativeBridge {
             } catch (e2: Exception) {
                 println("Failed to load native bridge library: ${e.message}")
             }
+        } catch (e: RuntimeException) {
+            isNativeAvailable = false
+            try {
+                Gdx.app?.log("NativeBridge", "Failed to load native bridge library: ${e.message}")
+            } catch (e2: Exception) {
+                println("Failed to load native bridge library: ${e.message}")
+            }
         }
     }
 
