@@ -2,8 +2,8 @@ package com.unciv.logic
 
 import com.unciv.logic.map.NativeMapCache
 import com.unciv.logic.map.TileMap
-import com.unciv.models.metadata.MapParameters
-import com.unciv.models.metadata.MapSize
+import com.unciv.logic.map.MapParameters
+import com.unciv.logic.map.MapSize
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
