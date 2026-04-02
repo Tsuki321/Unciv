@@ -237,7 +237,8 @@ jobs:
           if [[ "${{ github.ref_name }}" =~ ^([0-9]+)\.([0-9]+)\.([0-9]+)(-patch[0-9]+)?$ ]]; then
             UNCIV_VERSION="${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.${BASH_REMATCH[3]}"
           else
-            UNCIV_VERSION="0.0.0"
+            echo "::warning::Non-semver ref '${{ github.ref_name }}' detected; using fallback MSI version 0.0.1"
+            UNCIV_VERSION="0.0.1"
           fi
           export UNCIV_VERSION
           wix build .github/workflows/unciv.wxs
