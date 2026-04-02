@@ -62,6 +62,9 @@ jobs:
       - name: Compile kotlin and build classes
         run: ./gradlew classes
 
+      - name: Extract Android native libraries
+        run: ./gradlew android:copyAndroidNatives
+
       - name: Run code checks
         run: ./gradlew check
 
