@@ -131,7 +131,7 @@ jobs:
         continue-on-error: true
         shell: bash
         run: |
-          mv android/build/outputs/apk/release/Unciv-release-unsigned-signed.apk Unciv-signed.apk
+          mv android/build/outputs/apk/release/Unciv-release-signed.apk Unciv-signed.apk
 
       - name: Upload JAR
         continue-on-error: true
@@ -234,7 +234,13 @@ jobs:
       - name: Build WiX on Windows
         shell: bash
         run: |
-          UNCIV_VERSION=${{ github.ref_name }} wix build .github/workflows/unciv.wxs
+          if [[ "${{ github.ref_name }}" =~ ^([0-9]+)\.([0-9]+)\.([0-9]+)(-patch[0-9]+)?$ ]]; then
+            UNCIV_VERSION="${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.${BASH_REMATCH[3]}"
+          else
+            UNCIV_VERSION="0.0.0"
+          fi
+          export UNCIV_VERSION
+          wix build .github/workflows/unciv.wxs
 
 
       - name: Show folders
@@ -286,9 +292,9 @@ jobs:
           mv UncivLinuxFiles/linuxFilesForJar.zip deploy
           mv UncivDeploymentZips/Unciv-Windows64.zip deploy
           mv UncivDeploymentZips/Unciv-Linux64.zip deploy
-          mv UncivAPK/Unciv-signed.apk deploy
+          if [ -f UncivAPK/Unciv-signed.apk ]; then mv UncivAPK/Unciv-signed.apk deploy; fi
           mv UncivServer/UncivServer.jar deploy
-          mv Unciv-MSI/Unciv.msi deploy
+          if [ -f Unciv-MSI/Unciv.msi ]; then mv Unciv-MSI/Unciv.msi deploy; fi
 
       - name: Check if this is a real release or a test version, for Github release
         id: check-version-tag
