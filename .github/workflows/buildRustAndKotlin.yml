@@ -20,15 +20,20 @@ jobs:
           - os: macos-latest
             target: x86_64-apple-darwin
             lib_name: libnative_bridge.dylib
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            lib_name: libnative_bridge.dylib
     steps:
       - uses: actions/checkout@v4
 
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
 
       - name: Build Native Bridge
         working-directory: native-bridge
-        run: cargo build --release
+        run: cargo build --release --target ${{ matrix.target }}
 
       - uses: actions/setup-java@v4
         with:
@@ -43,13 +48,13 @@ jobs:
         run: ./gradlew classes
 
       - name: Run code checks with native bridge
-        run: ./gradlew check -Djava.library.path=native-bridge/target/release -Dunciv.test.requireNativeBridge=true
+        run: ./gradlew check -Djava.library.path=native-bridge/target/${{ matrix.target }}/release -Dunciv.test.requireNativeBridge=true
 
       - name: Upload Native Library Artifact
         uses: actions/upload-artifact@v4
         with:
           name: native-lib-${{ matrix.target }}
-          path: native-bridge/target/release/${{ matrix.lib_name }}
+          path: native-bridge/target/${{ matrix.target }}/release/${{ matrix.lib_name }}
 
   build-rust-native:
     name: Build Rust Native cdylib for ${{ matrix.target }}
@@ -57,9 +62,6 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: macos-latest
-            target: aarch64-apple-darwin
-            lib_name: libnative_bridge.dylib
           - os: ubuntu-latest
             target: aarch64-linux-android
             lib_name: libnative_bridge.so
@@ -75,35 +77,19 @@ jobs:
         with:
           targets: ${{ matrix.target }}
 
-      - name: Setup Android NDK (if Android)
-        if: contains(matrix.target, 'android')
+      - name: Setup Android NDK
         uses: nttld/setup-ndk@v1
         with:
           ndk-version: r25b
 
-      - name: Install cargo-ndk (if Android)
-        if: contains(matrix.target, 'android')
+      - name: Install cargo-ndk
         run: cargo install cargo-ndk
 
-      - name: Build Desktop (Cargo flag)
-        if: ${{ !contains(matrix.target, 'android') }}
-        working-directory: native-bridge
-        run: cargo build --release --target ${{ matrix.target }}
-
-      - name: Build Android (Cargo NDK)
-        if: contains(matrix.target, 'android')
+      - name: Build Android
         working-directory: native-bridge
         run: cargo ndk -t ${{ matrix.target }} -o ./jniLibs build --release
 
-      - name: Upload Artifact (Desktop)
-        if: ${{ !contains(matrix.target, 'android') }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: native-lib-${{ matrix.target }}
-          path: native-bridge/target/${{ matrix.target }}/release/${{ matrix.lib_name }}
-
-      - name: Upload Artifact (Android)
-        if: contains(matrix.target, 'android')
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: native-lib-${{ matrix.target }}
