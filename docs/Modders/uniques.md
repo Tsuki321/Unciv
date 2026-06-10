@@ -265,6 +265,21 @@ Simple unique parameters are explained by mouseover. Complex parameters are expl
 
 	Applicable to: Triggerable
 
+??? example  "Choose a music track for [unknown], [unknown], [unknown]"
+	Parameters are unchecked, strings not matching existing tracks or flags are ignored.
+
+	See [Context-sensitive music](Images-and-Audio.md#context-sensitive-music-overview)
+
+	The first parameter is the track name prefix, e.g. a Civilization name or "this civ".
+
+	The second parameter is a list of zero or more suffixes, comma-separated, used to specify a "mood", like Peace, War, Ambient etc. First track that matches wins.
+
+	The third parameter is a list of zero or more flags: PrefixMustMatch, SuffixMustMatch, SlowFade, PlaySingle, PlayDefaultFile.
+
+	This unique is automatically hidden from users.
+
+	Applicable to: Triggerable
+
 ??? example  "Suppress warning [validationWarning]"
 	Allows suppressing specific validation warnings. Errors, deprecation warnings, or warnings about untyped and non-filtering uniques should be heeded, not suppressed, and are therefore not accepted. Note that this can be used in ModOptions, in the uniques a warning is about, or as modifier on the unique triggering a warning - but you still need to be specific. Even in the modifier case you will need to specify a sufficiently selective portion of the warning text as parameter.
 
@@ -664,13 +679,13 @@ Simple unique parameters are explained by mouseover. Complex parameters are expl
 
 	Applicable to: Global, FollowerBelief
 
-??? example  "Enables conversion of city production to [civWideStat]"
-	Example: "Enables conversion of city production to [Gold]"
+??? example  "Enables conversion of city production to [stat]"
+	Example: "Enables conversion of city production to [Culture]"
 
 	Applicable to: Global
 
-??? example  "Production to [civWideStat] conversion in cities changed by [relativeAmount]%"
-	Example: "Production to [Gold] conversion in cities changed by [+20]%"
+??? example  "Production to [stat] conversion in cities changed by [relativeAmount]%"
+	Example: "Production to [Culture] conversion in cities changed by [+20]%"
 
 	Applicable to: Global
 
@@ -888,6 +903,9 @@ Simple unique parameters are explained by mouseover. Complex parameters are expl
 
 	Applicable to: Global
 
+??? example  "Enables establishment of embassies"
+	Applicable to: Global
+
 ??? example  "Requires establishing embassies to conduct advanced diplomacy"
 	Applicable to: Global
 
@@ -1036,6 +1054,11 @@ Simple unique parameters are explained by mouseover. Complex parameters are expl
 	Applicable to: Global
 
 ??? example  "Rebel units may spawn"
+	Applicable to: Global
+
+??? example  "Cannot build [buildingFilter] buildings"
+	Example: "Cannot build [Culture] buildings"
+
 	Applicable to: Global
 
 ??? example  "[relativeAmount]% Strength"
@@ -1254,9 +1277,6 @@ Simple unique parameters are explained by mouseover. Complex parameters are expl
 	Applicable to: Era
 
 ## Tech uniques
-??? example  "Enables establishment of embassies"
-	Applicable to: Tech
-
 ??? example  "Starting tech"
 	Applicable to: Tech
 
@@ -1271,7 +1291,7 @@ Simple unique parameters are explained by mouseover. Complex parameters are expl
 ??? example  "Unavailable"
 	Meant to be used together with conditionals, like "Unavailable &lt;after generating a Great Prophet&gt;".
 
-	Applicable to: Tech, Policy, Building, Unit, Promotion, Improvement, Ruins, Event, EventChoice
+	Applicable to: Tech, Policy, FounderBelief, FollowerBelief, Building, Unit, Promotion, Improvement, Ruins, Event, EventChoice
 
 ??? example  "Cannot be hurried"
 	Applicable to: Tech, Building
@@ -1304,7 +1324,7 @@ Simple unique parameters are explained by mouseover. Complex parameters are expl
 ??? example  "Unavailable"
 	Meant to be used together with conditionals, like "Unavailable &lt;after generating a Great Prophet&gt;".
 
-	Applicable to: Tech, Policy, Building, Unit, Promotion, Improvement, Ruins, Event, EventChoice
+	Applicable to: Tech, Policy, FounderBelief, FollowerBelief, Building, Unit, Promotion, Improvement, Ruins, Event, EventChoice
 
 ??? example  "[relativeAmount]% weight to this choice for AI decisions"
 	Example: "[+20]% weight to this choice for AI decisions"
@@ -1347,6 +1367,11 @@ Simple unique parameters are explained by mouseover. Complex parameters are expl
 
 ??? example  "Only available"
 	Meant to be used together with conditionals, like "Only available &lt;after adopting [policy]&gt; &lt;while the empire is happy&gt;". Only allows Building when ALL conditionals are met. Will also block Upgrade and Transform actions. See also CanOnlyBeBuiltWhen
+
+	Applicable to: Tech, Policy, FounderBelief, FollowerBelief, Building, Unit, Promotion, Improvement, Ruins, Event, EventChoice
+
+??? example  "Unavailable"
+	Meant to be used together with conditionals, like "Unavailable &lt;after generating a Great Prophet&gt;".
 
 	Applicable to: Tech, Policy, FounderBelief, FollowerBelief, Building, Unit, Promotion, Improvement, Ruins, Event, EventChoice
 
@@ -1631,6 +1656,11 @@ Simple unique parameters are explained by mouseover. Complex parameters are expl
 
 	Applicable to: Tech, Policy, FounderBelief, FollowerBelief, Building, Unit, Promotion, Improvement, Ruins, Event, EventChoice
 
+??? example  "Unavailable"
+	Meant to be used together with conditionals, like "Unavailable &lt;after generating a Great Prophet&gt;".
+
+	Applicable to: Tech, Policy, FounderBelief, FollowerBelief, Building, Unit, Promotion, Improvement, Ruins, Event, EventChoice
+
 ??? example  "Earn [amount]% of [mapUnitFilter] unit's [costOrStrength] as [stockpile] when killed within 4 tiles of a city following this religion"
 	Example: "Earn [3]% of [Wounded] unit's [Cost] as [Mana] when killed within 4 tiles of a city following this religion"
 
@@ -1706,7 +1736,7 @@ Simple unique parameters are explained by mouseover. Complex parameters are expl
 ??? example  "Unavailable"
 	Meant to be used together with conditionals, like "Unavailable &lt;after generating a Great Prophet&gt;".
 
-	Applicable to: Tech, Policy, Building, Unit, Promotion, Improvement, Ruins, Event, EventChoice
+	Applicable to: Tech, Policy, FounderBelief, FollowerBelief, Building, Unit, Promotion, Improvement, Ruins, Event, EventChoice
 
 ??? example  "Excess Food converted to Production when under construction"
 	Applicable to: Building, Unit
@@ -1968,7 +1998,7 @@ Simple unique parameters are explained by mouseover. Complex parameters are expl
 ??? example  "Unavailable"
 	Meant to be used together with conditionals, like "Unavailable &lt;after generating a Great Prophet&gt;".
 
-	Applicable to: Tech, Policy, Building, Unit, Promotion, Improvement, Ruins, Event, EventChoice
+	Applicable to: Tech, Policy, FounderBelief, FollowerBelief, Building, Unit, Promotion, Improvement, Ruins, Event, EventChoice
 
 ??? example  "Excess Food converted to Production when under construction"
 	Applicable to: Building, Unit
@@ -2514,7 +2544,7 @@ Simple unique parameters are explained by mouseover. Complex parameters are expl
 ??? example  "Unavailable"
 	Meant to be used together with conditionals, like "Unavailable &lt;after generating a Great Prophet&gt;".
 
-	Applicable to: Tech, Policy, Building, Unit, Promotion, Improvement, Ruins, Event, EventChoice
+	Applicable to: Tech, Policy, FounderBelief, FollowerBelief, Building, Unit, Promotion, Improvement, Ruins, Event, EventChoice
 
 ??? example  "Not shown on world screen"
 	This unique is automatically hidden from users.
@@ -2845,7 +2875,7 @@ Simple unique parameters are explained by mouseover. Complex parameters are expl
 ??? example  "Unavailable"
 	Meant to be used together with conditionals, like "Unavailable &lt;after generating a Great Prophet&gt;".
 
-	Applicable to: Tech, Policy, Building, Unit, Promotion, Improvement, Ruins, Event, EventChoice
+	Applicable to: Tech, Policy, FounderBelief, FollowerBelief, Building, Unit, Promotion, Improvement, Ruins, Event, EventChoice
 
 ??? example  "Must be next to [tileFilter]"
 	Example: "Must be next to [Farm]"
@@ -3139,7 +3169,7 @@ Simple unique parameters are explained by mouseover. Complex parameters are expl
 ??? example  "Unavailable"
 	Meant to be used together with conditionals, like "Unavailable &lt;after generating a Great Prophet&gt;".
 
-	Applicable to: Tech, Policy, Building, Unit, Promotion, Improvement, Ruins, Event, EventChoice
+	Applicable to: Tech, Policy, FounderBelief, FollowerBelief, Building, Unit, Promotion, Improvement, Ruins, Event, EventChoice
 
 ??? example  "Free [unit] found in the ruins"
 	Example: "Free [Musketman] found in the ruins"
@@ -3208,7 +3238,6 @@ Simple unique parameters are explained by mouseover. Complex parameters are expl
 
 	Applicable to: Nation, Tech, Policy, FounderBelief, FollowerBelief, Building, Unit, UnitType, Promotion, Terrain, Improvement, Resource, Ruins, Speed, Difficulty, EventChoice
 
-## Tutorial uniques
 ## CityState uniques
 ??? example  "Provides military units every ≈[positiveAmount] turns"
 	Example: "Provides military units every ≈[3] turns"
@@ -3327,7 +3356,7 @@ Simple unique parameters are explained by mouseover. Complex parameters are expl
 ??? example  "Unavailable"
 	Meant to be used together with conditionals, like "Unavailable &lt;after generating a Great Prophet&gt;".
 
-	Applicable to: Tech, Policy, Building, Unit, Promotion, Improvement, Ruins, Event, EventChoice
+	Applicable to: Tech, Policy, FounderBelief, FollowerBelief, Building, Unit, Promotion, Improvement, Ruins, Event, EventChoice
 
 ## EventChoice uniques
 ??? example  "Only available"
@@ -3338,7 +3367,7 @@ Simple unique parameters are explained by mouseover. Complex parameters are expl
 ??? example  "Unavailable"
 	Meant to be used together with conditionals, like "Unavailable &lt;after generating a Great Prophet&gt;".
 
-	Applicable to: Tech, Policy, Building, Unit, Promotion, Improvement, Ruins, Event, EventChoice
+	Applicable to: Tech, Policy, FounderBelief, FollowerBelief, Building, Unit, Promotion, Improvement, Ruins, Event, EventChoice
 
 ??? example  "[relativeAmount]% weight to this choice for AI decisions"
 	Example: "[+20]% weight to this choice for AI decisions"
@@ -3747,6 +3776,16 @@ Simple unique parameters are explained by mouseover. Complex parameters are expl
 
 	Applicable to: Conditional
 
+??? example  "&lt;when below [positiveAmount] movement&gt;"
+	Example: "&lt;when below [3] movement&gt;"
+
+	Applicable to: Conditional
+
+??? example  "&lt;when above [positiveAmount] movement&gt;"
+	Example: "&lt;when above [3] movement&gt;"
+
+	Applicable to: Conditional
+
 ??? example  "&lt;if it hasn't used other actions yet&gt;"
 	Applicable to: Conditional
 
@@ -3883,6 +3922,11 @@ Simple unique parameters are explained by mouseover. Complex parameters are expl
 
 	Applicable to: TriggerCondition
 
+??? example  "&lt;upon signing a peace treaty with [civFilter] Civilizations&gt;"
+	Example: "&lt;upon signing a peace treaty with [City-States] Civilizations&gt;"
+
+	Applicable to: TriggerCondition
+
 ??? example  "&lt;upon declaring friendship&gt;"
 	Applicable to: TriggerCondition
 
@@ -3924,6 +3968,11 @@ Simple unique parameters are explained by mouseover. Complex parameters are expl
 
 ??? example  "&lt;upon gaining a [baseUnitFilter] unit&gt;"
 	Example: "&lt;upon gaining a [Melee] unit&gt;"
+
+	Applicable to: TriggerCondition
+
+??? example  "&lt;upon losing a [mapUnitFilter] unit&gt;"
+	Example: "&lt;upon losing a [Wounded] unit&gt;"
 
 	Applicable to: TriggerCondition
 
@@ -4157,6 +4206,15 @@ Simple unique parameters are explained by mouseover. Complex parameters are expl
 
 	Applicable to: MetaModifier
 
+??? example  "&lt;Civilopedia link [pediaLink]&gt;"
+	Allows linking a unique to any Civilopedia page when it is listed in Civilopedia normally. This overrides automatic links to objects in the unique's parameters.
+
+	Example: "&lt;Civilopedia link [Units/Settler]&gt;"
+
+	This unique is automatically hidden from users.
+
+	Applicable to: MetaModifier
+
 ??? example  "&lt;Suppress warning [validationWarning]&gt;"
 	Allows suppressing specific validation warnings. Errors, deprecation warnings, or warnings about untyped and non-filtering uniques should be heeded, not suppressed, and are therefore not accepted. Note that this can be used in ModOptions, in the uniques a warning is about, or as modifier on the unique triggering a warning - but you still need to be specific. Even in the modifier case you will need to specify a sufficiently selective portion of the warning text as parameter.
 
@@ -4190,6 +4248,7 @@ Simple unique parameters are explained by mouseover. Complex parameters are expl
 Note that this must use the Mod name as Unciv displays it, not the Repository name.
 There is a conversion affecting dashes and leading/trailing blanks. Please make sure not to get confused.
 *[nonNegativeAmount]: This indicates a non-negative whole number, larger than or equal to zero, a '+' sign is optional.
+*[pediaLink]: A Civilopedia link in the form category/entry.
 *[policy]: The name of any policy.
 *[policyFilter]: The name of any policy, a filtering Unique, any branch (matching only the branch itself), a branch name with " Completed" appended (matches if the branch is completed), or a policy branch as `[branchName] branch` (matching all policies in that branch).
 *[positiveAmount]: This indicates a positive whole number, larger than zero, a '+' sign is optional.

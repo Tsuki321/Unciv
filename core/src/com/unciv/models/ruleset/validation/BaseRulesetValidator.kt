@@ -2,6 +2,7 @@ package com.unciv.models.ruleset.validation
 
 import com.unciv.Constants
 import com.unciv.models.ruleset.Building
+import com.unciv.models.ruleset.EventChoice
 import com.unciv.models.ruleset.MilestoneType
 import com.unciv.models.ruleset.Policy
 import com.unciv.models.ruleset.Ruleset
@@ -10,6 +11,7 @@ import com.unciv.models.ruleset.nation.Nation
 import com.unciv.models.ruleset.tile.TerrainType
 import com.unciv.models.ruleset.unique.IHasUniques
 import com.unciv.models.ruleset.unique.GameContext
+import com.unciv.models.ruleset.unique.Unique
 import com.unciv.models.ruleset.unique.UniqueType
 import com.unciv.models.ruleset.unit.BaseUnit
 import com.unciv.models.ruleset.unit.Promotion
@@ -201,6 +203,79 @@ internal class BaseRulesetValidator(
         for (policy in ruleset.policyBranches.values.flatMap { it.policies + it })
             if (policy != ruleset.policies[policy.name])
                 lines.add("More than one policy with the name ${policy.name} exists!", sourceObject = policy)
+    }
+
+    override fun addEventErrors(lines: RulesetErrorList) {
+        super.addEventErrors(lines)
+        checkEventCircularTriggers(lines)
+    }
+
+    private fun checkEventCircularTriggers(lines: RulesetErrorList) {
+        fun isHumanOnlyModifier(unique: Unique) =
+            unique.type == UniqueType.ConditionalCivFilter && unique.params[0] == Constants.humanPlayer
+        fun isAiOnlyModifier(unique: Unique) =
+            unique.type == UniqueType.ConditionalCivFilter && unique.params[0] == Constants.aiPlayer
+
+        // A choice is unreachable for AI if:
+        // - It has an unconditional AiChoiceWeight of -100% (or worse) → effective weight ≤ 0
+        // - It has OnlyAvailable with <for [Human player] Civilizations> → AI never satisfies this
+        // - It has Unavailable with only <for [AI player] Civilizations> → always blocks AI
+        fun isChoiceUnreachableForAI(choice: EventChoice): Boolean {
+            var weight = 1f
+            for (unique in choice.uniqueObjects) {
+                if (unique.type != UniqueType.AiChoiceWeight) continue
+                if (unique.modifiers.isNotEmpty()) continue // skip conditional weights
+                weight *= (1 + unique.params[0].toFloat() / 100)
+            }
+            if (weight <= 0f) return true
+
+            if (choice.uniqueObjects.any { unique ->
+                unique.type == UniqueType.OnlyAvailable &&
+                unique.modifiers.any { isHumanOnlyModifier(it) }
+            }) return true
+
+            if (choice.uniqueObjects.any { unique ->
+                unique.type == UniqueType.Unavailable &&
+                unique.modifiers.size == 1 && isAiOnlyModifier(unique.modifiers[0])
+            }) return true
+
+            return false
+        }
+
+        // A TriggerEvent unique is unreachable for AI if it has <for [Human player] Civilizations>,
+        // since conditionalsApply will always be false for an AI civ.
+        fun isTriggerUnreachableForAI(unique: Unique) =
+            unique.modifiers.any { isHumanOnlyModifier(it) }
+
+        fun recursiveCheck(history: HashSet<String>, eventName: String, level: Int) {
+            if (eventName in history) {
+                lines.add(
+                    "Circular trigger in Events: ${history.joinToString("→")}→$eventName - will cause an infinite loop for AI!",
+                    RulesetErrorSeverity.Warning,
+                    sourceObject = ruleset.events[eventName]
+                )
+                return
+            }
+            if (level > 99) return
+            val event = ruleset.events[eventName] ?: return
+            val triggerEventUniques = event.choices
+                .filter { !isChoiceUnreachableForAI(it) }
+                .flatMap { choice -> choice.uniqueObjects.filter {
+                    it.type == UniqueType.TriggerEvent && !isTriggerUnreachableForAI(it)
+                }}
+            if (triggerEventUniques.isEmpty()) return
+            history.add(eventName)
+            for (unique in triggerEventUniques) {
+                val linkedSetToPass =
+                    if (triggerEventUniques.size == 1) history
+                    else history.toHashSet()
+                recursiveCheck(linkedSetToPass, unique.params[0], level + 1)
+            }
+        }
+
+        for (eventName in ruleset.events.keys) {
+            recursiveCheck(hashSetOf(), eventName, 0)
+        }
     }
 
     override fun addPromotionErrors(lines: RulesetErrorList) {

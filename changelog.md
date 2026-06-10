@@ -1,3 +1,199 @@
+## 4.20.12
+
+Hopefully resolved  - mkdocs deploys correctly
+
+test: Resource diversity test, triggered by user complaint which stated that he's getting more uniform resources recently.
+
+chore: Fix mipmap generation failures for tests that create UI elements
+
+chore: Removed "fake deprecations", and forEachCiv and forEachCity functions with no usages
+
+chore: More Purity fixes
+
+chore: Purity update
+
+By xplon:
+- Hide icons when translating spy names 
+- Warn about translatable ruleset name collisions 
+
+By SomeTroglodyte:
+- Improve context menu indicator sizing 
+- Console: `civ add` and `civ remove` commands 
+- Public run config for FasterUIDevelopment 
+
+Add missing newline in advanced game settings - By unciv-loof
+
+## 4.20.11
+
+Fix double buttons for great people for constructing great improvements
+
+Fixed custom file directories on Android
+
+Approve values of 0 for certain mod constants in validator - By unciv-loof
+
+By SomeTroglodyte: 
+- Fix black outlines for Stat symbols in notifications
+- Fix TriggerUponLosingUnit 
+- Fix Android on screen keyboard show/hide
+- Minor CPU optimization
+
+Add "Vegetation" to Marsh - By EmperorPinguin
+
+## 4.20.10
+
+By SomeTroglodyte: 
+- Free policy notifications open policy screen 
+- A new triggerable Unique to choose a music track 
+- Better Scenario starts with fewer surprises 
+
+Boreal map type - By unciv-loof
+
+## 4.20.9
+
+AIs no longer stop creating cities late-game
+
+Add nation and capital city indicators in spy management
+
+Workers try to stay spread out - By Ambeco
+
+By SomeTroglodyte:
+- Show modifiers properly for improvement maintenance 
+- Fix translation generation for Comment nesting typed uniques 
+
+By unciv-loof:
+- Prevent AI from denouncing defeated civs 
+- Do not display (Unknown) after Civ name in MP metadata preview 
+
+Fix Educated Elite policy not gifting Great People - By AutumnPizazz
+
+## 4.20.8
+
+Seamless world wrap generation for procedural maps - By Romelium
+
+By SomeTroglodyte:
+- Improve "Battle Table" on small screens 
+- CPU performance improvements 
+
+RAM performance improvements - By Ambeco
+
+## 4.20.7
+
+Rendering improvements for large maps
+
+Bugfix for military presence check - By unciv-loof
+
+"cannot build xx buildings" unique - By chenxing61
+
+## 4.20.6
+
+By SeventhM:
+- Allow enabling embassies in Global/Policy/Era uniques instead of just techs 
+- Fix redundant requirement for sending embassies 
+- Add countables for worked tiles/population 
+- Fix edge case where Great Prophet costs are wrong 
+
+Improve language handling and slightly ease use of first-run language picker - By SomeTroglodyte
+
+CPU performance improvements - By Ambeco
+
+## 4.20.5
+
+modding: Correctly ignore possible filtering uniques for ruleset-disabled uniques
+
+modding: Check for event loops that the AI can get stuck in
+
+By SomeTroglodyte:
+- Improve Civilopedia around Diplomacy concepts depending on Embassies
+- Fixed map editor crash 
+
+Trigger upon losing unit unique - By PLynx01
+
+Handle display cutout in all orientations and fix rotation - By Gatien-L
+
+## 4.20.4
+
+modding: Ignore ruleset-specific errors when unique is disabled in this ruleset
+
+By SomeTroglodyte:
+- Hide religion- or espionage-specific demands when disabled 
+- Fixed NPE when Espionage Screen is used to move a spy to an unknown civ's city 
+
+By unciv-loof:
+- Add missing table row for city resistance 
+
+By Ambeco:
+- Unciv can receive links directly to games or new friends
+- Prevent save-scumming for more types of randomness
+
+Added option to stop workers from removing vegetation - By Emandac
+
+## 4.20.3
+
+Custom maps are retained when starting a new game from an old one
+
+Spies "evacuate" correctly from destroyed cities
+
+Spectators can see the building list again
+
+By unciv-loof:
+- Confirmation popup before breaking promise not to spy 
+- ConstructImprovementInstantly now clears tile improvement queue 
+
+Fixed issue with units selection in city - By ValeraShimchuck
+
+By Ambeco:
+- AI: Minimize movement before attacking
+- PathingMap can now also BFS, taking moveCost into consideration 
+
+## 4.20.2
+
+By unciv-loof:
+- Add back option to disable rendering of unitset in display settings 
+- Do not forcibly reset mod selections after closing warning in new game screen 
+- Clicking Bully and Conquer CS quests centers map on target's capital 
+- Don't display empty message in 'declare war' popup 
+- AIs can denounce multiple civs 
+
+Allow beliefs gotten from triggers to use triggerables - by SeventhM
+
+Ocean Ice should spawn again - by Ambeco
+
+## 4.20.1
+
+Drastically reduced memory consumption
+
+Barbarian encampments removed when tile enters civ territory
+
+Peace/war declarations on a third civ not considered trade "gifts"
+
+Fixed rare crash in cities when purchasing
+
+Buildings with "Moves to new capital when capital changes" not destroyed on city capture
+
+Desktop executables: Max JVM RAM *actually* increased to 4GB  
+
+Notifications shown in UI in order
+
+By unciv-loof:
+- Denouncement popups with moddable messages and audio 
+- turn 0 Autosave 
+
+## 4.20.0
+
+By unciv-loof:
+- Fix embassy trade logic bug 
+- Popup after other civ responds to a demand 
+
+By SeventhM:
+- Add conditionals for current unit movement 
+- Fix unavailable unique being ignored in unexpected places 
+
+Theoretical improvements to workerAutomation performance - By Ambeco
+
+Fixed translation in multiplayer game preview description - By evanofficial (new contributor!)
+
+'Upon signing a peace treaty' unique - By PLynx01
+
 ## 4.19.19
 
 Reset tileset settings when deleting the mod that contained the tileset
